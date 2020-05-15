@@ -32,7 +32,7 @@ var financeController = (function () {
   };
 
   var data = {
-    allItems: {
+    item: {
       inc: [],
       exp: [],
     },
@@ -41,13 +41,32 @@ var financeController = (function () {
       exp: 0,
     },
   };
+  return {
+    addItem: function (type, desc, val) {
+      console.log("item added");
+      var item, id;
+      if (data.item[type].length === 0) id = 1;
+      else id = data.item[type][data.item[type].length - 1].id + 1;
+
+      if (type === "inc") {
+        item = new Income(id, desc, val);
+      } else {
+        item = new Expense(id, desc, val);
+      }
+      data.item[type].push(item);
+    },
+    seeData: function () {
+      return data;
+    },
+  };
 })();
 
 var appController = (function (uiController, financeController) {
   var ctrlAddItem = function () {
-    console.log(uiController.getInput());
     // oruulah datag delgetsees unshih
+    var input = uiController.getInput();
     //olj avsa ugugdluudiigsanhuugiin controller damjuulan tend hadgalah
+    financeController.addItem(input.type, input.description, input.value);
     //web deer tohiroh hesegt ni gargana
     //tusviig tootsoolno
     // etssiin uldegdel tootsoog delgetsend haruulah
