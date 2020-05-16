@@ -10,6 +10,7 @@ var uiController = (function () {
     incomeLabel: ".budget__income--value",
     expenseLabel: ".budget__expenses--value",
     percentLabel: ".budget__expenses--percentage",
+    conternerDiv: ".container",
   };
   return {
     getInput: function () {
@@ -54,11 +55,11 @@ var uiController = (function () {
       if (type === "inc") {
         list = DOMstrings.incomeList;
         html =
-          '<div class="item clearfix" id="income-%id%"><div class="item__description">$$DESCRIPTION$$</div><div class="right clearfix"><div class="item__value">$$VALUE$$</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+          '<div class="item clearfix" id="inc-%id%"><div class="item__description">$$DESCRIPTION$$</div><div class="right clearfix"><div class="item__value">$$VALUE$$</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
       } else {
         list = DOMstrings.expenseList;
         html =
-          '<div class="item clearfix" id="expense-%id%"><div class="item__description">$$DESCRIPTION$$</div>          <div class="right clearfix"><div class="item__value">$$VALUE$$</div><div class="item__percentage"></div><div class="item__delete"><button class="item__delete--btn">                <i class="ion-ios-close-outline"></i></button></div></div></div>';
+          '<div class="item clearfix" id="exp-%id%"><div class="item__description">$$DESCRIPTION$$</div>          <div class="right clearfix"><div class="item__value">$$VALUE$$</div><div class="item__percentage"></div><div class="item__delete"><button class="item__delete--btn">                <i class="ion-ios-close-outline"></i></button></div></div></div>';
       }
       //beldsen html dotroo orlogo zarlagin utguudiig replace ashiglaj uurchlunu
       html = html.replace("%id%", item.id);
@@ -123,7 +124,7 @@ var financeController = (function () {
       var ids = data.item[type].map(function (el) {
         return el.id;
       });
-      var index = ids.indexof(id);
+      var index = ids.indexOf(id);
       if (index !== -1) {
         data.item[type].splice(index, 1);
       }
@@ -142,9 +143,9 @@ var financeController = (function () {
       data.item[type].push(item);
       return item;
     },
-    // seeData: function () {
-    //   return data;
-    // },
+    seeData: function () {
+      return data;
+    },
   };
 })();
 //app holbogch controller
@@ -179,6 +180,20 @@ var appController = (function (uiController, financeController) {
     document.addEventListener("keypress", function (event) {
       if (event.keyCode === 13 || event.which === 13) ctrlAddItem();
     });
+    document
+      .querySelector(DOM.conternerDiv)
+      .addEventListener("click", function (e) {
+        var id = e.target.parentNode.parentNode.parentNode.parentNode.id;
+        if (id) {
+          var arr = id.split("-");
+          var type = arr[0];
+          var itemId = parseInt(arr[1]);
+          // sanhuugiin module s utgana
+          financeController.deleteItem(type, itemId);
+          //delgetse deerees ustgana
+          //uldegdel tootsoog shinechilne
+        }
+      });
   };
 
   return {
