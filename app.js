@@ -119,6 +119,15 @@ var financeController = (function () {
         totalExp: data.totals.exp,
       };
     },
+    deleteItem: function (type, id) {
+      var ids = data.item[type].map(function (el) {
+        return el.id;
+      });
+      var index = ids.indexof(id);
+      if (index !== -1) {
+        data.item[type].splice(index, 1);
+      }
+    },
     addItem: function (type, desc, val) {
       console.log("item added");
       var item, id;
