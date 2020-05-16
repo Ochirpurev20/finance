@@ -16,6 +16,25 @@ var uiController = (function () {
     getDOMstrings: function () {
       return DOMstrings;
     },
+    addListItem: function (item, type) {
+      //orlogo zarlagiin element aguulsan html g beltgene
+      var html, list;
+      if (type === "inc") {
+        list = ".income__list";
+        html =
+          '<div class="item clearfix" id="income-%id%"><div class="item__description">$$DESCRIPTION$$</div><div class="right clearfix"><div class="item__value">$$VALUE$$</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+      } else {
+        list = ".expenses__list";
+        html =
+          '<div class="item clearfix" id="expense-%id%"><div class="item__description">$$DESCRIPTION$$</div>          <div class="right clearfix"><div class="item__value">$$VALUE$$</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn">                <i class="ion-ios-close-outline"></i></button></div></div></div>';
+      }
+      //beldsen html dotroo orlogo zarlagin utguudiig replace ashiglaj uurchlunu
+      html = html.replace("%id%", item.id);
+      html = html.replace("$$DESCRIPTION$$", item.description);
+      html = html.replace("$$VALUE$$", item.value);
+      //beltgesen html ee DOM ruu hiih
+      document.querySelector(list).insertAdjacentHTML("beforeend", html);
+    },
   };
 })();
 
@@ -54,20 +73,26 @@ var financeController = (function () {
         item = new Expense(id, desc, val);
       }
       data.item[type].push(item);
+      return item;
     },
-    seeData: function () {
-      return data;
-    },
+    // seeData: function () {
+    //   return data;
+    // },
   };
 })();
-
+//app holbogch controller
 var appController = (function (uiController, financeController) {
   var ctrlAddItem = function () {
     // oruulah datag delgetsees unshih
     var input = uiController.getInput();
     //olj avsa ugugdluudiigsanhuugiin controller damjuulan tend hadgalah
-    financeController.addItem(input.type, input.description, input.value);
+    var item = financeController.addItem(
+      input.type,
+      input.description,
+      input.value
+    );
     //web deer tohiroh hesegt ni gargana
+    uiController.addListItem(item, input.type);
     //tusviig tootsoolno
     // etssiin uldegdel tootsoog delgetsend haruulah
   };
