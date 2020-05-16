@@ -6,6 +6,10 @@ var uiController = (function () {
     addBtn: ".add__btn",
     incomeList: ".income__list",
     expenseList: ".expenses__list",
+    tusuvLabel: ".budget__value",
+    incomeLabel: ".budget__income--value",
+    expenseLabel: ".budget__expenses--value",
+    percentLabel: ".budget__expenses--percentage",
   };
   return {
     getInput: function () {
@@ -28,9 +32,21 @@ var uiController = (function () {
         el.value = "";
       });
       fieldArr[0].focus();
-      // for (var i = 0; i < fieldArr.length; i++) {
-      //   fieldArr[i].value = '';
-      // }
+    },
+
+    tusuvUzuuleh: function (tusuv) {
+      document.querySelector(DOMstrings.tusuvLabel).textContent = tusuv.tusuv;
+      document.querySelector(DOMstrings.incomeLabel).textContent =
+        tusuv.totalInc;
+      document.querySelector(DOMstrings.expenseLabel).textContent =
+        tusuv.totalExp;
+      if (tusuv.huvi !== 0) {
+        document.querySelector(DOMstrings.percentLabel).textContent =
+          tusuv.huvi + "%";
+      } else {
+        document.querySelector(DOMstrings.percentLabel).textContent =
+          tusuv.huvi;
+      }
     },
     addListItem: function (item, type) {
       //orlogo zarlagiin element aguulsan html g beltgene
@@ -42,7 +58,7 @@ var uiController = (function () {
       } else {
         list = DOMstrings.expenseList;
         html =
-          '<div class="item clearfix" id="expense-%id%"><div class="item__description">$$DESCRIPTION$$</div>          <div class="right clearfix"><div class="item__value">$$VALUE$$</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn">                <i class="ion-ios-close-outline"></i></button></div></div></div>';
+          '<div class="item clearfix" id="expense-%id%"><div class="item__description">$$DESCRIPTION$$</div>          <div class="right clearfix"><div class="item__value">$$VALUE$$</div><div class="item__percentage"></div><div class="item__delete"><button class="item__delete--btn">                <i class="ion-ios-close-outline"></i></button></div></div></div>';
       }
       //beldsen html dotroo orlogo zarlagin utguudiig replace ashiglaj uurchlunu
       html = html.replace("%id%", item.id);
@@ -142,7 +158,8 @@ var appController = (function (uiController, financeController) {
       financeController.tusuvTootsooloh();
       // etssiin uldegdel tootsoog delgetsend haruulah
       var tusuv = financeController.tusviigAvah();
-      console.log(tusuv);
+      uiController.tusuvUzuuleh(tusuv);
+      //console.log(tusuv);
     }
   };
   var setupEvents = function () {
@@ -159,6 +176,12 @@ var appController = (function (uiController, financeController) {
     init: function () {
       console.log("app starts");
       setupEvents();
+      uiController.tusuvUzuuleh({
+        tusuv: 0,
+        huvi: 0,
+        totalInc: 0,
+        totalExp: 0,
+      });
     },
   };
 })(uiController, financeController);
