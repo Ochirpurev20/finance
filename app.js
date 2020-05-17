@@ -49,6 +49,10 @@ var uiController = (function () {
           tusuv.huvi;
       }
     },
+    deleteListItem: function (id) {
+      var el = document.getElementById(id);
+      el.parentNode.removeChild(el);
+    },
     addListItem: function (item, type) {
       //orlogo zarlagiin element aguulsan html g beltgene
       var html, list;
@@ -191,6 +195,7 @@ var appController = (function (uiController, financeController) {
           // sanhuugiin module s utgana
           financeController.deleteItem(type, itemId);
           //delgetse deerees ustgana
+          uiController.deleteListItem(id);
           //uldegdel tootsoog shinechilne
         }
       });
